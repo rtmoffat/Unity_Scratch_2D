@@ -4,24 +4,37 @@ using Unity.VisualScripting;
 using UnityEditor.Callbacks;
 using UnityEngine;
 
+
+
 public class launchController : MonoBehaviour
 {
-    private int load=0;
-    private Vector3 originalPos;
+    public GameObject launchObject;
+    private SpringJoint2D sj;
+    private Vector3 originalPosition;
+    
     // Start is called before the first frame update
     void Start()
     {
-        originalPos = transform.position;
+        sj= GetComponent<SpringJoint2D>();
+        originalPosition=transform.position;
     }
 
     // Update is called once per frame
-    void Update() { 
-        if(Input.GetKey(KeyCode.Space))
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Space)) {
+            launchObject.GetComponent<Rigidbody2D>().AddForce(new Vector3(0f, 50f, 0f));
+            
+        }
+/*        else if(Input.GetKeyUp(KeyCode.Space)) {
+        }*/
+        void attachBody()
         {
-            Rigidbody2D rb= GetComponent<Rigidbody2D>();
-            rb.constraints &= ~RigidbodyConstraints2D.FreezePositionY;
-            rb.AddForce(new Vector2 (0f, 5000f));
-           
+            sj.connectedBody=launchObject.GetComponent<Rigidbody2D>();
+        }
+        void detatchBody()
+        {
+            sj.connectedBody = null;
         }
     }
 }
